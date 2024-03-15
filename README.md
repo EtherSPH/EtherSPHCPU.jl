@@ -87,5 +87,5 @@ Welcome to EtherSPHCPU.jl !
 
 - [TypeTree.jl](https://github.com/cnaak/TypeTree.jl): Never let me get lost in my abstract types.
 - [CellListMap.jl](https://github.com/m3g/CellListMap.jl): The core of the neighbour search algorithm. It seems the author is a researcher on molecular dynamics.
-- [FLoops.jl](git@github.com:JuliaFolds/FLoops.jl.git): Fast parallel cumputing with a single marco `@`! It speeds up around 2-3 times compared with `Threads.@threads` during my tests.
+- [FLoops.jl](https://github.com/JuliaFolds/FLoops.jl): Fast parallel cumputing with a single marco `@`! It speeds up around 2-3 times compared with `Threads.@threads` during my tests.
 - [SmoothedParticles.jl](https://github.com/OndrejKincl/SmoothedParticles.jl): This package inspires me at the beginning of the project. It has good examples and a good structure. I learned a lot from it.
