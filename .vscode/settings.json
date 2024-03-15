@@ -1,0 +1,20 @@
+{
+    "julia.environmentPath": "/home/bcynuaa/Project/EtherSPHOrganization/EtherSPHCPU.jl",
+    "autoHeader": {
+        "format": {
+            "startWith": "#=",
+            "middleWith": "",
+            "endWith": "=#",
+            "headerPrefix": "@",
+        },
+        "header": {
+            "author": "bcynuaa <bcynuaa@163.com> | callm1101 <Calm.Liu@outlook.com>",
+            "date": {
+                "type": "createTime",
+                "format": "YYYY/MM/DD HH:mm:ss",
+            },
+            "license": "MIT",
+            "description": "",
+        }
+    },
+}
