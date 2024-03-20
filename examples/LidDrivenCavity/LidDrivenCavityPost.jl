@@ -2,8 +2,8 @@
 # v0.19.40
 
 #> [frontmatter]
-#> title = "Cruchaga2DPost"
-#> description = "Cruchaga 2D SPH post-processing"
+#> title = "CollapseDryPost"
+#> description = "collapse dry SPH demo  post-process"
 #> 
 #>     [[frontmatter.author]]
 #>     name = "bcynuaa"
@@ -14,18 +14,14 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try
-            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
-        catch
-            b -> missing
-        end
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
 
-# ╔═╡ 6a25a422-e117-11ee-2f34-b57460ca2983
+# ╔═╡ 91c675d8-e105-11ee-23a2-e30fe3863c8b
 begin
     using ReadVTK
     using WriteVTK
@@ -35,15 +31,15 @@ begin
     using PlutoUI
 end
 
-# ╔═╡ 2506e8ec-d5ce-4404-b797-bea5dd6f3234
+# ╔═╡ 37768d7e-5e33-41cf-85ec-7d90d24cefb6
 begin
-    const file_dir = "./Cruchaga2DData/"
+    const file_dir = "./LidDrivenCavityData/"
     const file_lists = readdir(file_dir) |> sort!
     const total_time = 1.0
     vtpFile(step::Int64) = file_dir * file_lists[step + 1]
 end
 
-# ╔═╡ 837e3eb4-9d7e-4616-a79b-baf65fe2f637
+# ╔═╡ 5481ff11-75f4-47f6-974e-2ef8c43c7d77
 function getData(step::Int64)
     vtp_file_component = VTKFile(vtpFile(step))
     points = get_points(vtp_file_component)
@@ -52,7 +48,7 @@ function getData(step::Int64)
     return points[1, :], points[2, :], velocitys_norm
 end
 
-# ╔═╡ 10f88558-54dd-4a82-9c99-39083bc22618
+# ╔═╡ d4959301-7222-439f-b56b-951900032908
 function plot(step::Int64)
     x, y, v = getData(step)
     fig = Figure(size = (600, 400))
@@ -66,8 +62,9 @@ function plot(step::Int64)
         y,
         color = v,
         colormap = :turbo,
+		colorrange = (0, 1),
         nan_color = :lightgrey,
-        markersize = 0.003,
+        markersize = 0.007,
         shading = FastShading,
         disffuse = Vec3f(0.1),
         specular = Vec3f(0.1),
@@ -75,15 +72,16 @@ function plot(step::Int64)
         backlight = 0.0f0,
         ssao = true,
     )
-    cbar = Colorbar(fig[1, 2], particles, label = "Velocity Norm")
-    cbar.ticks = 0:0.1:2
+    cbar = Colorbar(fig[1, 2], particles, label = "Velocity Norm", size=20)
+    cbar.ticks = 0:0.1:1
+	cbar.limits = (0, 1)
     return fig
 end
 
-# ╔═╡ ace83ba7-8026-4f0c-a843-7398b48ed9ac
+# ╔═╡ 580dd940-4f4e-4d3f-a9eb-58af93af9e9e
 @bind step PlutoUI.Slider(0:(length(file_lists) - 1), default = 0)
 
-# ╔═╡ b58fea1b-ac92-4045-8e6c-49e6447a8609
+# ╔═╡ 8d72d6e3-33a3-4e79-bd77-94ed18e56f86
 plot(step)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -1822,11 +1820,11 @@ version = "3.5.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═6a25a422-e117-11ee-2f34-b57460ca2983
-# ╠═2506e8ec-d5ce-4404-b797-bea5dd6f3234
-# ╠═837e3eb4-9d7e-4616-a79b-baf65fe2f637
-# ╠═10f88558-54dd-4a82-9c99-39083bc22618
-# ╠═ace83ba7-8026-4f0c-a843-7398b48ed9ac
-# ╠═b58fea1b-ac92-4045-8e6c-49e6447a8609
+# ╠═91c675d8-e105-11ee-23a2-e30fe3863c8b
+# ╠═37768d7e-5e33-41cf-85ec-7d90d24cefb6
+# ╠═5481ff11-75f4-47f6-974e-2ef8c43c7d77
+# ╠═d4959301-7222-439f-b56b-951900032908
+# ╠═580dd940-4f4e-4d3f-a9eb-58af93af9e9e
+# ╠═8d72d6e3-33a3-4e79-bd77-94ed18e56f86
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
