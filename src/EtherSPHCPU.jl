@@ -29,7 +29,7 @@ include("./DataIO/DataIO.jl")
 include("./Solve/Solve.jl")
 
 """ 
-    showAbstractTypeTree(abstract_type::DataType)::Nothicng
+    showAbstractTypeTree(abstract_type::DataType)::Nothing
 
 The `showAbstractTypeTree()` function is used to show the type tree of the abstract type.
 """

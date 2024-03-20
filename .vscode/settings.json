@@ -1,5 +1,4 @@
 {
-    "julia.environmentPath": "/home/bcynuaa/Project/EtherSPHOrganization/EtherSPHCPU.jl",
     "autoHeader": {
         "format": {
             "startWith": "#=",
