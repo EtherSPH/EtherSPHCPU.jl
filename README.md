@@ -29,7 +29,7 @@ ERROR: LoadError: UndefVarError: `assistant` not defined # From FLoops
 
 In my practice, I found this problem is caused by a mismatch between `MicroCollection`, `BangBang` and `FLoops`. The newest version of `MicroCollection` and `BangBang` requires an older version of `FLoops` at `v0.1.11`. This conflicts with the feature `assistant`. One possible method to solve such conflict is to update FLoops by hand to `v0.2.1`:
 
-```julia
+```bash
 (EtherSPHCPU)pkg> add FLoops@v0.2.1
 ```
 
