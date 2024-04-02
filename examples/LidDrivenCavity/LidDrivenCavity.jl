@@ -14,7 +14,7 @@ const lid_velocity = 1.0;
 const rho_0 = 1.0;
 const mu_0 = lid_length * rho_0 * lid_velocity / reynolds_number;
 const c_0 = 10 * lid_velocity;
-const p_0 = 0.02 * rho_0 * c_0^2;
+const p_0 = 0.001 * rho_0 * c_0^2;
 const gamma = 7;
 
 const dim = 2;

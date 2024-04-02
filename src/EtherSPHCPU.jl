@@ -18,6 +18,10 @@ using BangBang
 using MicroCollections
 using TypeTree
 using ExportAll
+using ReadVTK
+using DataFrames
+using CSV
+using LightXML
 
 include("./SPHKernel/SPHKernel.jl")
 include("./Particle/Particle.jl")
