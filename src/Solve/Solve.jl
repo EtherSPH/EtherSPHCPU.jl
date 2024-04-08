@@ -8,5 +8,6 @@
 defaultCheck(p::ParticleType where {ParticleType <: AbstractParticle})::Bool = true;
 
 include("./FluidWallSolve.jl");
+include("./FluidThermostaticWallSolve.jl");
 include("./FluidCompulsiveThermostaticWallSolve.jl");
 include("./FluidVelocitySolve.jl");
