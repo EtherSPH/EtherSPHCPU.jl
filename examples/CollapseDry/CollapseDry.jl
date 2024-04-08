@@ -16,8 +16,6 @@ const influence_radius = 3.0 * dr;
 
 smooth_kernel = SmoothKernel(influence_radius, dim, CubicSpline);
 
-smooth_kernel = SmoothKernel(influence_radius, dim, CubicSpline);
-
 const box_width = 4.0;
 const box_height = 3.0;
 
