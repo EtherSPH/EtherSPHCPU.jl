@@ -60,6 +60,7 @@ mutable struct ThermalLiquidParticle{
     t_::RealType
     dt_::Base.Threads.Atomic{RealType}
     kappa_::RealType
+    cp_::RealType
 end
 
 function ThermalLiquidParticle(dim::IntType where {IntType <: Integer}; RealType::DataType = Float64)::ThermalLiquidParticle
@@ -78,6 +79,7 @@ function ThermalLiquidParticle(dim::IntType where {IntType <: Integer}; RealType
     t::RealType = 0.0
     dt = Base.Threads.Atomic{RealType}(0.0)
     kappa::RealType = 0.0
+    cp::RealType = 0.0
     return ThermalLiquidParticle(
         x_vec,
         v_vec,
@@ -94,5 +96,6 @@ function ThermalLiquidParticle(dim::IntType where {IntType <: Integer}; RealType
         t,
         dt,
         kappa,
+        cp,
     )
 end

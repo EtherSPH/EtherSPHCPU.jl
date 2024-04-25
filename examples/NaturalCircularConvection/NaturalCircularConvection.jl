@@ -10,10 +10,16 @@ using EtherSPHCPU
 const prandtl_number = 0.706;
 const rayleigh_number = 4.7e4;
 
+# case 0 (standard case): ratio_io = 2.6, c_0 = 2.0, p_0 = 0.025*..., rayleigh_number = 4.7e4
+# case 1: ratio_io = 3., c_0 = 2.0, p_0 = 0.025*..., rayleigh_number = 1e3/4/5
+# case 2: ratio_io = 6., c_0 = 2.0, p_0 = 0.025*..., rayleigh_number = 1e4/4/5
+# case 3: ratio_io = 10., c_0 = 2.0, p_0 = 0.025*..., rayleigh_number = 1e3/4/5
+# case 4: ratio_io = 2/3/5/10, c_0 = 2.0, p_0 = 0.025*..., rayleigh_number = 4.7e4
+
 const r_outer = 1.0;
 const ratio_io = 2.6;
 const r_inner = r_outer / ratio_io;
-const reference_length = 1.0;
+const reference_length = r_outer - r_inner;
 
 const g = 1.0;
 const g_vec = [0.0, -g];
@@ -29,7 +35,7 @@ const t_0 = t_outer;
 const cp = prandtl_number * kappa / mu_0;
 const rho_0 = sqrt(rayleigh_number * mu_0 * kappa / g / beta / (reference_length^3) / delta_t / cp);
 const c_0 = 2.0;
-const p_0 = 0.01 * rho_0 * c_0^2;
+const p_0 = 0.025 * rho_0 * c_0^2;
 const gamma = 7;
 const alpha = mu_0 / rho_0 / prandtl_number;
 
@@ -81,6 +87,7 @@ function createCircularLiquidParticles(r_start::RealType where {RealType <: Abst
             particle.mass_ = rho_0 * dr_layer * dr_here
             particle.gap_ = sqrt(dr_layer * dr_here)
             particle.kappa_ = kappa
+            particle.cp_ = cp
             push!(particles, particle)
         end
     end

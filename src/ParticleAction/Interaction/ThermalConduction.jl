@@ -6,17 +6,18 @@
  =#
 
 @inline function thermalConduction!(
-    p_i::ParticleType1 where {ParticleType1 <: FluidParticle},
-    p_j::ParticleType2 where {ParticleType2 <: FluidParticle},
+    p_i::ParticleType1 where {ParticleType1 <: AbstractParticle},
+    p_j::ParticleType2 where {ParticleType2 <: AbstractParticle},
     neighbour::NeighbourType where {NeighbourType <: AbstractNeighbour},
     smooth_kernel::SmoothKernelType where {SmoothKernelType <: SmoothKernel},
-    th_wc_lm::ThermalWeaklyCompressibleLiquidModel,
+    equation_model::ModelType where {ModelType <: AbstractEquationModel},
 )::Nothing
+    equivalent_kappa::eltype(p_i.x_vec_) = 2 * p_i.kappa_ * p_j.kappa_ / (p_i.kappa_ + p_j.kappa_)
     dq::eltype(p_i.x_vec_) =
-        1 / th_wc_lm.cp_ * (p_i.kappa_ + p_j.kappa_) * neighbour.r_ * neighbour.kernel_gradient_ / p_i.rho_ / p_j.rho_ /
-        (neighbour.r_^2 + 0.01 * smooth_kernel.h_^2) * (p_i.t_ - p_j.t_)
-    Threads.atomic_add!(p_i.dt_, dq * p_j.mass_)
-    Threads.atomic_add!(p_j.dt_, -dq * p_i.mass_)
+        2 * equivalent_kappa * neighbour.r_ * neighbour.kernel_gradient_ / p_i.rho_ / p_j.rho_ / (neighbour.r_^2 + 0.01 * smooth_kernel.h_^2) *
+        (p_i.t_ - p_j.t_)
+    Threads.atomic_add!(p_i.dt_, dq * p_j.mass_ / p_i.cp_)
+    Threads.atomic_add!(p_j.dt_, -dq * p_i.mass_ / p_j.cp_)
     return nothing
 end
 

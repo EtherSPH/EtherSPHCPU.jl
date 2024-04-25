@@ -7,7 +7,11 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -37,29 +41,29 @@ end
 
 # ╔═╡ 09174b63-cece-4bed-862e-92996cff491b
 begin
-	const dr = 0.02
-	const dim = 2
-	const influence_radius = 3*dr
-	const rho_0 = 1.1538824720077858
-	const smooth_kernel = SmoothKernel(influence_radius, dim, WendlandC2)
-	const n_points_along_radius = 21
-	thetas = [0, 30, 60, 90, 120, 150, 180]
-	theta_s = Float64.(thetas)
-	theta_s .+= 90
-	theta_s .*= pi / 180
-	const n_theta = length(theta_s)
-	points_along_radius = zeros(2, n_theta * n_points_along_radius)
-	r_inner = 1 / 2.6
-	r_outer = 1.
-	r_s = LinRange(r_inner, r_outer, n_points_along_radius)
-	for i_theta in eachindex(theta_s)
-		for i_point_theta in eachindex(r_s)
-			x, y = r_s[i_point_theta] * [cos(theta_s[i_theta]), sin(theta_s[i_theta])]
-			index = (i_theta-1)*n_points_along_radius + i_point_theta
-			points_along_radius[:, index] .= [x, y]
-		end
-	end
-	const ref_radius = LinRange(0, 1, n_points_along_radius)
+    const dr = 0.02
+    const dim = 2
+    const influence_radius = 3 * dr
+    const rho_0 = 1.1538824720077858
+    const smooth_kernel = SmoothKernel(influence_radius, dim, WendlandC2)
+    const n_points_along_radius = 21
+    thetas = [0, 30, 60, 90, 120, 150, 180]
+    theta_s = Float64.(thetas)
+    theta_s .+= 90
+    theta_s .*= pi / 180
+    const n_theta = length(theta_s)
+    points_along_radius = zeros(2, n_theta * n_points_along_radius)
+    r_inner = 1 / 2.6
+    r_outer = 1.0
+    r_s = LinRange(r_inner, r_outer, n_points_along_radius)
+    for i_theta in eachindex(theta_s)
+        for i_point_theta in eachindex(r_s)
+            x, y = r_s[i_point_theta] * [cos(theta_s[i_theta]), sin(theta_s[i_theta])]
+            index = (i_theta - 1) * n_points_along_radius + i_point_theta
+            points_along_radius[:, index] .= [x, y]
+        end
+    end
+    const ref_radius = LinRange(0, 1, n_points_along_radius)
 end
 
 # ╔═╡ 0c877a7a-597f-47aa-854c-a26126bf5434
@@ -70,12 +74,12 @@ function getData(step::Int64)
     @views y = points[2, :]
     @views temp = get_point_data(vtpio_dataframe_view.vtp_file_)["Temperature"] |> get_data
     t = vtpio_dataframe_view.field_data_frame_.Time[1]
-	vtpio_dataframe_view.grouped_points_data_frame_[1][:, kMassString] .= dr^2 *  vtpio_dataframe_view.grouped_points_data_frame_[1][:, kDensityString]
+    vtpio_dataframe_view.grouped_points_data_frame_[1][:, kMassString] .= dr^2 * vtpio_dataframe_view.grouped_points_data_frame_[1][:, kDensityString]
     vtpio_dataframe_view.grouped_points_data_frame_[2][:, kDensityString] .= rho_0
     vtpio_dataframe_view.grouped_points_data_frame_[2][:, kMassString] .= dr^2 * rho_0
-	t_along_radius = kernelValueInterpolation(points_along_radius, vtpio_dataframe_view, :Temperature, smooth_kernel, [1, 2])
-	t_along_radius = reshape(t_along_radius, (n_points_along_radius, n_theta))
-	t_along_radius = Matrix(t_along_radius')
+    t_along_radius = kernelValueInterpolation(points_along_radius, vtpio_dataframe_view, :Temperature, smooth_kernel, [1, 2])
+    t_along_radius = reshape(t_along_radius, (n_points_along_radius, n_theta))
+    t_along_radius = Matrix(t_along_radius')
     return x, y, temp, t, t_along_radius
     return
 end
@@ -101,11 +105,11 @@ function plot(step::Int64)
     )
     cbar = Colorbar(fig[1, 2], particles, label = "Temperature")
     cbar.ticks = 0:0.1:1
-	ax2 = Axis(fig[1, 3], title="Temperature Along Radius")
-	for i_theta in 1: n_theta
-		lines!(ref_radius, t_along_radius[i_theta, :], label="SPH-$(thetas[i_theta])")
-	end
-	axislegend(ax2, position=:rt)
+    ax2 = Axis(fig[1, 3], title = "Temperature Along Radius")
+    for i_theta in 1:n_theta
+        lines!(ref_radius, t_along_radius[i_theta, :], label = "SPH-$(thetas[i_theta])")
+    end
+    axislegend(ax2, position = :rt)
     return fig
 end
 

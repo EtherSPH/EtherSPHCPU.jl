@@ -85,6 +85,7 @@ for index in eachindex(fluid_particles)
     fluid_particles[index].mass_ = fluid_particles[index].rho_ * dr^2
     fluid_particles[index].gap_ = gap
     fluid_particles[index].kappa_ = kappa
+    fluid_particles[index].cp_ = cp
 end
 
 const cavity_thick_number = 3
