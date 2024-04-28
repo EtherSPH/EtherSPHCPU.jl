@@ -112,7 +112,8 @@ function kernelValueInterpolation(
     vtpio_data_frame_view::VTPIODataFrameView,
     field::Symbol,
     smooth_kernel::SmoothKernel,
-    data_frame_index_list::IntArrayType,
+    data_frame_index_list::IntArrayType;
+    none_value::RealType where {RealType <: AbstractFloat} = NaN,
 )::AbstractVector where {IntType <: Integer, IntArrayType <: AbstractVector{IntType}}
     RealType = vtpio_data_frame_view.grouped_points_data_frame_[1][1, field] |> typeof
     n_interpolated_points = size(interpolated_points, 2)
@@ -133,6 +134,8 @@ function kernelValueInterpolation(
     @floop @simd for i in 1:n_interpolated_points
         if kernel_weights[i][] > 0
             @inbounds interpolated_values[i] = weighted_values[i][] / kernel_weights[i][]
+        else
+            @inbounds interpolated_values[i] = none_value
         end
     end
     return interpolated_values

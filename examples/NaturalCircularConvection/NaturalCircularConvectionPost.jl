@@ -81,7 +81,6 @@ function getData(step::Int64)
     t_along_radius = reshape(t_along_radius, (n_points_along_radius, n_theta))
     t_along_radius = Matrix(t_along_radius')
     return x, y, temp, t, t_along_radius
-    return
 end
 
 # ╔═╡ e889ccf2-fb7c-4da2-8a72-6f305657079f
