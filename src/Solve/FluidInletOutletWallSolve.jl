@@ -119,7 +119,8 @@ function eachStep!(
                 smooth_kernel,
                 wc_lm,
             )
-            @inbounds pressureForce!(fluid_particles[fluid_wall_neighbour.i_], fluid_wall_neighbour, smooth_kernel, wc_lm)
+            # pressure force is not necessary here for wall particles
+            # @inbounds pressureForce!(fluid_particles[fluid_wall_neighbour.i_], fluid_wall_neighbour, smooth_kernel, wc_lm)
         end
     end
     fluid_inlet_force_task = @async begin
