@@ -7,7 +7,11 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local iv = try
+            Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value
+        catch
+            b -> missing
+        end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
@@ -101,7 +105,7 @@ function plot(step::Int64)
     cbar.ticks = 0:0.1:1
     ax2 = Axis(fig[1, 3], title = L"$V_x$ along y", xlabel = L"$V_x$", ylabel = L"$y$", limits = (0.0, 0.0011, 0.0, 0.01))
     lines!(monitor_vx, monitor_y, label = L"SPH-$V_x$", color = :blue)
-    scatter!(ref_vx, ref_y, label = L"stable ref-$V_x$", color = :red, markersize=20)
+    scatter!(ref_vx, ref_y, label = L"stable ref-$V_x$", color = :red, markersize = 20)
     axislegend(ax2, position = :rt)
     return fig
 end
